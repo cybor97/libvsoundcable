@@ -5,6 +5,8 @@ import java.io.InputStream;
 import java.util.HashMap;
 import java.util.concurrent.TimeoutException;
 
+import static core.SoundConfig.DEFAULT_TIMEOUT;
+
 /**
  * BufferedSoundInputStream lets to read data from single controlled source using multiple threads
  *
@@ -71,7 +73,7 @@ public abstract class BufferedSoundInputStream extends InputStream {
     }
 
     public byte[] getBuffer(long lineId) throws InterruptedException, TimeoutException {
-        return getBuffer(lineId, 2000);
+        return getBuffer(lineId, DEFAULT_TIMEOUT);
     }
 
     public byte[] getBuffer(long lineId, long timeout) throws InterruptedException, TimeoutException {
@@ -90,6 +92,8 @@ public abstract class BufferedSoundInputStream extends InputStream {
                 throw new TimeoutException("Timed out actualizing data from source");
             }
         }
+
+        linesActualization.replace(lineId, false);
         return buffer;
     }
 }
